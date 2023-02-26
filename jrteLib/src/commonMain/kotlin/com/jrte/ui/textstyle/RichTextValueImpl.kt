@@ -47,11 +47,16 @@ internal class RichTextValueImpl(override val styleMapper: StyleMapper) : RichTe
     private val currentSelection: TextRange
         get() = (composition ?: selection).coerceNotReversed()
 
+    private var nextSelection: TextRange? = null
+
     override val currentStyles: Set<Style>
         get() = filterCurrentStyles(annotatedStringBuilder.spanStyles)
             .map { styleMapper.fromTag(it.tag) }.toSet() +
                 filterCurrentStyles(annotatedStringBuilder.paragraphStyles)
                     .map { styleMapper.fromTag(it.tag) }.toSet()
+
+
+    private var nextStyle: Style? = null
 
     private fun clearRedoStack() {
         // If offset in the history is not 0 clear possible "redo" states
@@ -161,10 +166,20 @@ internal class RichTextValueImpl(override val styleMapper: StyleMapper) : RichTe
 
     @OptIn(ExperimentalUnitApi::class)
     private fun insertStyleInternal(style: Style): RichTextValue {
-        if (currentSelection.collapsed && style == Style.ClearFormat) {
+
+        val appliedSelection = nextSelection ?: currentSelection
+        nextSelection = null
+
+        if (appliedSelection.collapsed && style == Style.ClearFormat) {
             updateHistoryIfNecessary()
-            annotatedStringBuilder.splitStyles(currentSelection.end)
+            annotatedStringBuilder.splitStyles(appliedSelection.end)
             updateHistory()
+
+            return this
+        }
+
+        if (appliedSelection.collapsed){
+            nextStyle = style
 
             return this
         }
@@ -176,7 +191,7 @@ internal class RichTextValueImpl(override val styleMapper: StyleMapper) : RichTe
             getCurrentParagraphStyles(style.takeUnless {
                 it == Style.ClearFormat || it is Style.ParagraphStyle
             }), // Always remove all paragraphs; they cannot overlap
-            currentSelection.coerceParagraph(annotatedStringBuilder.text) // Select whole paragraph
+            appliedSelection.coerceParagraph(annotatedStringBuilder.text) // Select whole paragraph
         )
 
         val changedStyles = spansToAdd.isNotEmpty() || spansToRemove.isNotEmpty() ||
@@ -209,16 +224,16 @@ internal class RichTextValueImpl(override val styleMapper: StyleMapper) : RichTe
         val spanStyle = styleMapper.toSpanStyle(style)?.let {
             StyleRange(
                 item = it,
-                start = currentSelection.start,
-                end = currentSelection.end,
+                start = appliedSelection.start,
+                end = appliedSelection.end,
                 tag = styleMapper.toTag(style)
             )
         }
 
         val paragraphStyle = styleMapper.toParagraphStyle(style)?.let {
-            var startOfTheParagraph = currentSelection.start
+            var startOfTheParagraph = appliedSelection.start
                 .coerceStartOfParagraph(annotatedStringBuilder.text)
-            var endOfTheParagraph = currentSelection.end
+            var endOfTheParagraph = appliedSelection.end
                 .coerceEndOfParagraph(annotatedStringBuilder.text)
 
             val removedParagraph = paragraphsToRemove.singleOrNull()
@@ -280,6 +295,7 @@ internal class RichTextValueImpl(override val styleMapper: StyleMapper) : RichTe
     override fun redo() = this.copy().redoInternal()
 
     override fun updatedValueAndStyles(newValue: TextFieldValue): Boolean {
+        val style = nextStyle?.also { nextStyle = null }
         var updateText = true
         val updatedStyles = annotatedStringBuilder.updateStyles(
             previousSelection = selection,
@@ -310,6 +326,10 @@ internal class RichTextValueImpl(override val styleMapper: StyleMapper) : RichTe
             } else if (newValue.text.isNotEmpty()) {
                 updateHistory()
             }
+            nextSelection = if (newValue.selection.start > 0) {
+                TextRange(start = newValue.selection.start - 1, end = newValue.selection.end)
+            } else null
+            style?.let(::insertStyleInternal)
 
             return true
         }
@@ -333,6 +353,7 @@ internal class RichTextValueImpl(override val styleMapper: StyleMapper) : RichTe
         selection = this@RichTextValueImpl.selection
         composition = this@RichTextValueImpl.composition
         historyOffset = this@RichTextValueImpl.historyOffset
+        nextStyle = this@RichTextValueImpl.nextStyle
         historySnapshots.clear()
         historySnapshots.addAll(this@RichTextValueImpl.historySnapshots)
     }
