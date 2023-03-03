@@ -13,9 +13,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jrte.androidapp.ui.theme.JRTETheme
-import com.jrte.ui.composable.JRTEditor
-import com.jrte.ui.composable.JRTToolbar
-import com.jrte.ui.composable.defaultRichTextFieldStyle
+import com.jrte.ui.composable.JRTextEditor
+import com.jrte.ui.composable.JRTextToolbar
+import com.jrte.ui.composable.defaultJRTextFieldStyle
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,12 +27,12 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize()) {
                     Column(modifier = Modifier.fillMaxSize()) {
-                        JRTEditor(
+                        JRTextEditor(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .fillMaxHeight()
                                 .padding(16.dp),
-                            textFieldStyle = defaultRichTextFieldStyle().copy(
+                            textFieldStyle = defaultJRTextFieldStyle().copy(
                                 textColor = Color.Black,
                                 placeholderColor = Color.LightGray,
                                 placeholder = "Write something here...",
@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
                             ),
                         )
                     }
-                    JRTToolbar()
+                    JRTextToolbar()
                 }
             }
         }
@@ -50,7 +50,8 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun DefaultPreview() {
         JRTETheme {
-            JRTToolbar()
+            JRTextEditor()
+            JRTextToolbar()
         }
     }
 }

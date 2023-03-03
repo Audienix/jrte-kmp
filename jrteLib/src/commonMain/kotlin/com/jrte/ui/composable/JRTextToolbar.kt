@@ -4,27 +4,23 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.ExperimentalUnitApi
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
-import com.jrte.ui.textstyle.RichTextValue
-import com.jrte.ui.textstyle.Style
-import com.jrte.ui.textstyle.StyleMapper
+import com.jrte.ui.textstyle.*
+import com.jrte.ui.theme.BackgroundToolbar
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun JRTToolbar() {
+fun JRTextToolbar() {
     var value by remember {
         mutableStateOf(
             RichTextValue.fromString(
@@ -36,17 +32,19 @@ fun JRTToolbar() {
         )
     }
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 8.dp),
         contentAlignment = Alignment.BottomCenter
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .background(Color.White)
+                .background(BackgroundToolbar)
+                .clip(shape = RoundedCornerShape(4.dp))
+                .shadow(elevation = 1.dp)
                 .horizontalScroll(rememberScrollState()),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
         ) {
             IconButton(onClick = {
                 value = value.insertStyle(BoldStyle)
@@ -75,34 +73,15 @@ fun JRTToolbar() {
                     contentDescription = null
                 )
             }
+            IconButton(onClick = {
+                value = value.insertStyle(LineThroughStyle)
+            }) {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    painter = painterResource("icon_linethrough.xml"),
+                    contentDescription = null
+                )
+            }
         }
-    }
-}
-object BoldStyle : Style
-object ItalicStyle : Style
-object UnderlineStyle : Style
-
-class CustomStyleMapper : StyleMapper() {
-
-    override fun fromTag(tag: String) =
-        runCatching { super.fromTag(tag) }.getOrNull() ?: when (tag) {
-            "${BoldStyle::class.simpleName}/" -> BoldStyle
-            "${ItalicStyle::class.simpleName}/" -> ItalicStyle
-            "${UnderlineStyle::class.simpleName}/" -> UnderlineStyle
-            else -> throw IllegalArgumentException()
-        }
-
-    @ExperimentalUnitApi
-    override fun toSpanStyle(style: Style) = super.toSpanStyle(style) ?: when (style) {
-        is BoldStyle -> SpanStyle(
-            fontWeight = FontWeight.Bold,
-        )
-        is ItalicStyle -> SpanStyle(
-            fontStyle = FontStyle.Italic,
-        )
-        is UnderlineStyle -> SpanStyle(
-            textDecoration = TextDecoration.Underline,
-        )
-        else -> null
     }
 }

@@ -1,5 +1,6 @@
-val library_version: String by extra
-val kotlin_version = extra["kotlin.version"] as String
+val libraryVersion: String by extra
+val kotlinVersion = extra["kotlin_version"] as String
+val composeVersion = extra["compose_version"] as String
 
 plugins {
     kotlin("multiplatform")
@@ -33,7 +34,7 @@ kotlin {
                 api(compose.foundation)
                 api(compose.material3)
                 api("com.arkivanov.essenty:parcelable:0.10.0")
-                implementation("org.jetbrains.compose.components:components-resources:1.4.0-alpha01-dev942")
+                implementation("org.jetbrains.compose.components:components-resources:1.4.0-alpha01-dev954")
             }
         }
 
