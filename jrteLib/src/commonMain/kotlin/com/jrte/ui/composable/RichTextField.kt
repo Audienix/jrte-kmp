@@ -45,7 +45,7 @@ internal fun RichTextField(
             )
         }
         CompositionLocalProvider(
-            LocalTextToolbar provides EmptyTextToolbar
+            LocalTextToolbar provides EmptyContextMenuToolbar
         ) {
             BasicTextField(
                 modifier = Modifier.fillMaxSize(),
