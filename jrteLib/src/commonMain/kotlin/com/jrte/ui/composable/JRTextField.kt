@@ -24,14 +24,13 @@ import com.jrte.ui.textstyle.UnorderedListTransformation
 private const val EMPTY_STRING = ""
 
 @Composable
-internal fun RichTextField(
+internal fun JRTextField(
     value: TextFieldValue,
     styledValue: AnnotatedString,
     styleMapper: StyleMapper,
     onValueChange: (TextFieldValue) -> Unit,
     modifier: Modifier = Modifier,
-    textFieldStyle: RichTextFieldStyle = defaultRichTextFieldStyle(),
-    readOnly: Boolean = false,
+    textFieldStyle: JRTextFieldStyle = defaultJRTextFieldStyle(),
 ) {
     Box(modifier = modifier) {
         if (value.text.isEmpty()) {
@@ -45,7 +44,7 @@ internal fun RichTextField(
             )
         }
         CompositionLocalProvider(
-            LocalTextToolbar provides EmptyTextToolbar
+            LocalTextToolbar provides EmptyContextMenuToolbar
         ) {
             BasicTextField(
                 modifier = Modifier.fillMaxSize(),
@@ -61,14 +60,13 @@ internal fun RichTextField(
                     fontSize = textFieldStyle.textSize,
                 ),
                 cursorBrush = SolidColor(textFieldStyle.cursorColor),
-                readOnly = readOnly,
             )
         }
     }
 }
 
 @Composable
-fun defaultRichTextFieldStyle() = RichTextFieldStyle(
+fun defaultJRTextFieldStyle() = JRTextFieldStyle(
     placeholder = EMPTY_STRING,
     textStyle = MaterialTheme.typography.bodySmall,
     textColor = MaterialTheme.colorScheme.onSurface,
@@ -77,7 +75,7 @@ fun defaultRichTextFieldStyle() = RichTextFieldStyle(
     textSize = 18.sp
 )
 
-data class RichTextFieldStyle(
+data class JRTextFieldStyle(
     val placeholder: String,
     val textStyle: TextStyle,
     val textColor: Color,

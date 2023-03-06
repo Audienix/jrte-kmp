@@ -1,5 +1,6 @@
-val library_version: String by extra
-val kotlin_version = extra["kotlin.version"] as String
+val libraryVersion: String by extra
+val kotlinVersion = extra["kotlin_version"] as String
+val composeVersion = extra["compose_version"] as String
 
 plugins {
     kotlin("multiplatform")
@@ -32,9 +33,8 @@ kotlin {
                 api(compose.runtime)
                 api(compose.foundation)
                 api(compose.material3)
-                api("androidx.core:core-ktx:1.9.0")
-                implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlin_version")
                 api("com.arkivanov.essenty:parcelable:0.10.0")
+                implementation("org.jetbrains.compose.components:components-resources:1.4.0-alpha01-dev954")
             }
         }
 
@@ -44,11 +44,7 @@ kotlin {
             }
         }
 
-        val androidMain by getting {
-            dependencies {
-                api("androidx.core:core-ktx:1.9.0")
-            }
-        }
+        val androidMain by getting
         val androidTest by getting
         val iosX64Main by getting
         val iosArm64Main by getting
@@ -74,8 +70,9 @@ kotlin {
 android {
     namespace = "com.jrte"
     compileSdk = 33
+    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
     defaultConfig {
-        minSdk = 23
+        minSdk = 24
         targetSdk = 33
     }
 }
