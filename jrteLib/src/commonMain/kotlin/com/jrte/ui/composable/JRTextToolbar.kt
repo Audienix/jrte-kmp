@@ -20,17 +20,10 @@ import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun JRTextToolbar() {
-    var value by remember {
-        mutableStateOf(
-            RichTextValue.fromString(
-                // Optional parameter; leave it blank if you want to use provided styles
-                // But if you want to customize the user experience you're free to do that
-                // by providing a custom StyleMapper
-                styleMapper = CustomStyleMapper()
-            )
-        )
-    }
+fun JRTextToolbar(
+    value: RichTextValue,
+    onValueChange: (RichTextValue) -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -47,7 +40,7 @@ fun JRTextToolbar() {
             horizontalArrangement = Arrangement.Center,
         ) {
             IconButton(onClick = {
-                value = value.insertStyle(BoldStyle)
+                onValueChange(value.insertStyle(BoldStyle))
             }) {
                 Icon(
                     modifier = Modifier.size(24.dp),
@@ -56,7 +49,7 @@ fun JRTextToolbar() {
                 )
             }
             IconButton(onClick = {
-                value = value.insertStyle(ItalicStyle)
+                onValueChange(value.insertStyle(ItalicStyle))
             }) {
                 Icon(
                     modifier = Modifier.size(24.dp),
@@ -65,7 +58,7 @@ fun JRTextToolbar() {
                 )
             }
             IconButton(onClick = {
-                value = value.insertStyle(UnderlineStyle)
+                onValueChange(value.insertStyle(UnderlineStyle))
             }) {
                 Icon(
                     modifier = Modifier.size(24.dp),
@@ -74,7 +67,7 @@ fun JRTextToolbar() {
                 )
             }
             IconButton(onClick = {
-                value = value.insertStyle(LineThroughStyle)
+                onValueChange(value.insertStyle(LineThroughStyle))
             }) {
                 Icon(
                     modifier = Modifier.size(24.dp),
