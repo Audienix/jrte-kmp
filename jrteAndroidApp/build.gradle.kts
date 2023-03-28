@@ -67,4 +67,6 @@ dependencies {
 
     debugImplementation("androidx.compose.ui:ui-tooling:${rootProject.extra["compose_version"]}")
     debugImplementation("androidx.compose.ui:ui-test-manifest:${rootProject.extra["compose_version"]}")
+
+    implementation ("com.github.skydoves:balloon-compose:1.5.2")
 }

@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.jrte.androidapp.ui.theme.JRTETheme
 import com.jrte.ui.composable.JRTextScreen
+import com.skydoves.balloon.compose.Balloon
+import com.skydoves.balloon.compose.rememberBalloonBuilder
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +26,9 @@ class MainActivity : ComponentActivity() {
                     JRTextScreen()
                 }
             }
+//            Balloon(builder = rememberBalloonBuilder(block = {}), balloonContent = ) {
+//
+//            }
         }
     }
 

@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jrte.ViewModel.JRTEViewModel
 import com.jrte.ui.textstyle.CustomStyleMapper
 import com.jrte.ui.textstyle.RichTextValue
 
@@ -13,6 +14,7 @@ import com.jrte.ui.textstyle.RichTextValue
 fun JRTextScreen(
     modifier: Modifier = Modifier
 ){
+    val viewModel = remember { JRTEViewModel() }
     var value by remember {
         mutableStateOf(
             RichTextValue.fromString(
@@ -42,6 +44,7 @@ fun JRTextScreen(
     }
     JRTextToolbar(
         value = value,
-        onValueChange = onValueChange
+        onValueChange = onValueChange,
+        viewModel = viewModel
     )
 }
