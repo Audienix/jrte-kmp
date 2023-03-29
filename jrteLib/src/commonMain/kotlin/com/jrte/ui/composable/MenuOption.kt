@@ -1,8 +1,8 @@
 package com.jrte.ui.composable
 
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -18,7 +18,7 @@ fun MenuOption(
 ) {
     IconButton(
         onClick = {
-            onClick(data.mid)
+            onClick(data.menuId)
         }
     ) {
         Icon(

@@ -10,9 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.jrte.androidapp.ui.theme.JRTETheme
-import com.jrte.ui.composable.JRTextScreen
-import com.skydoves.balloon.compose.Balloon
-import com.skydoves.balloon.compose.rememberBalloonBuilder
+import com.jrte.ui.composable.JRTEScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,12 +21,9 @@ class MainActivity : ComponentActivity() {
             JRTETheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    JRTextScreen()
+                    JRTEScreen()
                 }
             }
-//            Balloon(builder = rememberBalloonBuilder(block = {}), balloonContent = ) {
-//
-//            }
         }
     }
 
@@ -36,7 +31,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun DefaultPreview() {
         JRTETheme {
-            JRTextScreen()
+            JRTEScreen()
         }
     }
 }

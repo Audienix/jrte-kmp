@@ -36,7 +36,7 @@ kotlin {
                 api(compose.material3)
                 api("com.arkivanov.essenty:parcelable:0.10.0")
                 implementation("org.jetbrains.compose.components:components-resources:1.4.0-alpha01-dev954")
-                implementation ("com.github.skydoves:balloon-compose:1.5.2")
+                api("com.github.skydoves:balloon-compose:1.5.2")
             }
         }
 

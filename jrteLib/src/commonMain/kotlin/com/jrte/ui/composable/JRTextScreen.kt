@@ -9,9 +9,10 @@ import androidx.compose.ui.unit.sp
 import com.jrte.ViewModel.JRTEViewModel
 import com.jrte.ui.textstyle.CustomStyleMapper
 import com.jrte.ui.textstyle.RichTextValue
+import com.jrte.ui.theme.JRTETheme
 
 @Composable
-fun JRTextScreen(
+fun JRTEScreen(
     modifier: Modifier = Modifier
 ){
     val viewModel = remember { JRTEViewModel() }
@@ -26,25 +27,27 @@ fun JRTextScreen(
         )
     }
     val onValueChange: (RichTextValue) -> Unit = { value = it }
-    Column(modifier = modifier.fillMaxSize()) {
-        JRTextEditor(
+    JRTETheme {
+        Column(modifier = modifier.fillMaxSize()) {
+            JRTEditor(
+                value = value,
+                onValueChange = onValueChange,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .padding(16.dp),
+                textFieldStyle = defaultJRTextFieldStyle().copy(
+                    textColor = Color.Black,
+                    placeholderColor = Color.LightGray,
+                    placeholder = "Write something here...",
+                    textSize = 18.sp
+                ),
+            )
+        }
+        JRTOptionToolbar(
             value = value,
             onValueChange = onValueChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .padding(16.dp),
-            textFieldStyle = defaultJRTextFieldStyle().copy(
-                textColor = Color.Black,
-                placeholderColor = Color.LightGray,
-                placeholder = "Write something here...",
-                textSize = 18.sp
-            ),
+            viewModel = viewModel
         )
     }
-    JRTextToolbar(
-        value = value,
-        onValueChange = onValueChange,
-        viewModel = viewModel
-    )
 }
